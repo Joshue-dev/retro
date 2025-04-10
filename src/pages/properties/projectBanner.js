@@ -91,20 +91,7 @@ const ProjectBanners = () => {
     showSettingsBar,
   ];
 
-  const skipCondition = () => {
-    let nextIndex = currentConditionIndex + 1;
-    while (nextIndex < conditions.length && !conditions[nextIndex]) {
-      nextIndex++;
-    }
-
-    if (nextIndex < conditions.length) {
-      setCurrentConditionIndex(nextIndex);
-    } else {
-      setCurrentConditionIndex(null); // No more conditions to display
-    }
-  };
   const firstTrueIndex = conditions.findIndex(Boolean);
-
 
   useEffect(() => {
     if (firstTrueIndex !== -1) {
@@ -217,29 +204,7 @@ const ProjectBanners = () => {
                 spacing={{ base: "8px", md: "18px" }}
                 pr="4px"
               >
-                <Button
-                  color="text"
-                  bg="transparent"
-                  h={{ base: "23px", md: "44px" }}
-                  w={{ base: "47px", md: "75px" }}
-                  _hover={{ opacity: 1, textDecoration: "none" }}
-                  _active={{ opacity: 1 }}
-                  fontSize={{ base: "13px", md: "16px" }}
-                  fontWeight={{ base: "500", md: 600 }}
-                  px="32px"
-                  py="13px"
-                  fontFamily="Inter"
-                  rounded="8px"
-                  onClick={skipCondition}
-                  border="1px solid"
-                  borderColor={
-                    theme.theme_name !== "light"
-                      ? "matador_border_color.200"
-                      : "#E4E7EC"
-                  }
-                >
-                  Skip
-                </Button>
+
                 <Button
                   color="#FFF"
                   bg="primary"

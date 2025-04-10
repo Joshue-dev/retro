@@ -1,4 +1,4 @@
-import { Stack, Box, Grid, Center, useTheme } from "@chakra-ui/react";
+import { Stack, Box, Grid, Center, useTheme, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { LayoutView } from "@/components/page_layout";
@@ -7,7 +7,7 @@ import { useInfiniteQuery } from "react-query";
 import EmptyState from "../../components/appState/empty-state";
 import Auth from "../../hoc/Auth";
 import { ListingCard } from "@/components/cards/ListingCard";
-import { OvalLoader } from "ui-lib/ui-lib.components/Spinner/spinner";
+import { OvalLoader, Spinner } from "ui-lib/ui-lib.components/Spinner/spinner";
 import { ScrollToTop } from "@/components/portfolioAndAssetInfo/screens/Portfolio";
 import { ErrorPage } from "@/components/appState/error-page";
 import ProjectBanners from "./projectBanner";
@@ -96,14 +96,19 @@ const Properties = () => {
         id="projectWrap"
       >
         {isLoading ? (
-          <Center h={`70vh`}>
-            <OvalLoader />
-          </Center>
+          <Flex
+            align="center"
+            justify="center"
+            w="100vw"
+            h={{ base: "calc(100vh - 70px)", md: "calc(100vh - 100px)" }}
+          >
+            <Spinner noAbsolute />
+          </Flex>
         ) : isError ? (
           <ErrorPage error={error} />
         ) : (
-          <Box w='full'>
-            <ProjectBanners/>
+          <Box w="full">
+            <ProjectBanners />
             {projectData?.length > 0 ? (
               <Grid
                 gap={{ base: `24px`, md: "32px" }}

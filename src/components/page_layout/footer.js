@@ -69,6 +69,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
           base: "repeat(1, 1fr)",
           md: "repeat(2, 1fr)",
           lg: "repeat(4, 1fr)",
+          xl: 'repeat(5, 1fr)'
         }}
         gap="24px"
       >
@@ -146,6 +147,25 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
             </Text>
           </Stack>
         ) : null}
+        <Stack gap="16px">
+        <Text fontSize="20px" fontWeight={600}>
+          Get the app
+        </Text>
+        <Flex gap="16px" align="center">
+          <Link
+            href="https://apps.apple.com/au/app/my-veritasi/id6478011265"
+            target="_blank"
+          >
+            <Image maxW="115px" src={AppleStoreIcon.src} alt="apple store" />
+          </Link>
+          <Link
+            href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi"
+            target="_blank"
+          >
+            <Image maxW="115px" src={PlayStoreIcon.src} alt="play store" />
+          </Link>
+        </Flex>
+      </Stack>
       </Grid>
       {isMobile ? <Stack display={{ base: "flex", md: "none" }} gap="16px">
         <Text fontSize="20px" fontWeight={600}>

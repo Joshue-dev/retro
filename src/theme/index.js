@@ -140,6 +140,25 @@ export const currentTheme = mode => {
           },
         }
       },
+      Progress: {
+        baseStyle: {
+          filledTrack: {
+            bg: 'black',
+          },
+        },
+        variants: {
+          main_store: {
+            filledTrack: {
+              bg: `primary`,
+            },
+          },
+          default: {
+            filledTrack: {
+              bg: `auto`,
+            },
+          },
+        },
+      },
     }
   });
 };

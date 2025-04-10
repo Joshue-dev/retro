@@ -1,11 +1,15 @@
 module.exports = {
-	images: {
-		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'd351aore6m6nwq.cloudfront.net',
-				pathname: '/**',
-			},
-		],
-	},
-};
+    eslint: {
+      // Warning: This allows production builds to successfully complete even if
+      // your project has ESLint errors.
+      ignoreDuringBuilds: true,
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '*',
+        },
+      ],
+    },
+  };

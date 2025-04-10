@@ -1,4 +1,4 @@
-import { Stack, Box, Grid, Center, useTheme, Flex } from "@chakra-ui/react";
+import { Stack, Box, Grid, Center, useTheme, Flex, SlideFade, Skeleton } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { LayoutView } from "@/components/page_layout";
@@ -11,6 +11,7 @@ import { OvalLoader, Spinner } from "ui-lib/ui-lib.components/Spinner/spinner";
 import { ScrollToTop } from "@/components/portfolioAndAssetInfo/screens/Portfolio";
 import { ErrorPage } from "@/components/appState/error-page";
 import ProjectBanners from "./projectBanner";
+import { colors } from "constants/names";
 
 const Properties = () => {
   const [screenWidth, setScreenWidth] = useState(0);
@@ -60,6 +61,9 @@ const Properties = () => {
   );
 
   const wrap = document?.getElementById("projectWrap");
+
+  const arrayForLoaders = (lens) =>
+    Array.from({ length: lens || 4 - (numberOfListings % 4) }, () => 0);
 
   const handleAnimation = () => {
     const currentScrollY = wrap?.scrollTop;
@@ -129,6 +133,26 @@ const Properties = () => {
                     />
                   </Stack>
                 ))}
+                {isFetchingNextPage
+                    ? arrayForLoaders().map((item, index) => (
+                        <SlideFade key={index} in={isFetchingNextPage}>
+                            <Skeleton
+                              shadow={"sm"}
+                              cursor={"pointer"}
+                              whileTap={{ scale: 0.98 }}
+                              whileHover={{ scale: 1.01 }}
+                              h="326px"
+                              w="full"
+                              bgSize={"cover"}
+                              borderRadius={"5px"}
+                              position={"relative"}
+                              startColor={colors?.[Math.floor(Math.random() * 3)]}
+                              endColor={colors?.[Math.floor(Math.random() * 3)]}
+                              rounded="0"
+                            />
+                        </SlideFade>
+                      ))
+                    : null}
               </Grid>
             ) : (
               <EmptyState

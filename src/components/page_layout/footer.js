@@ -46,7 +46,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
           ? "matador_border_color.200"
           : "matador_border_color.300"
       }
-      bg="background"
+      bg="#F5F5F5"
       pt="3rem"
       pb="27px"
       px={{ base: "25px", md: "60px", xl: "120px" }}
@@ -124,16 +124,16 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
         </Stack>
         {storeData?.company_address ? (
           <Stack w="full" gap={{ base: "8px", md: "20px" }}>
-            <Text fontSize="18px" fontFamily="Liberation Sans" fontWeight={700}>
+            <Text fontSize="18px" fontFamily="Liberation Sans" fontWeight={700} lineHeight='20px'>
               Location
             </Text>
-            <Text fontSize="14px" lineHeight="33px" maxW="20em">
+            <Text fontSize="14px" maxW="20em">
               {storeData?.company_address}
             </Text>
           </Stack>
         ) : null}
         {storeData?.email ? (
-          <Stack display={{ base: "none", md: "flex" }} w="full" gap="20px">
+          <Stack display={{ base: "none", md: "flex" }} w="full" gap={{ base: "8px", md: "20px" }}>
             <Text fontSize="18px" fontFamily="Liberation Sans" fontWeight={700}>
               Contact
             </Text>
@@ -147,8 +147,8 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
             </Text>
           </Stack>
         ) : null}
-        <Stack display={{ base: 'none', md: 'flex' }} gap="16px">
-        <Text fontSize="20px" fontWeight={600}>
+        <Stack display={{ base: 'none', md: 'flex' }} gap="20px">
+        <Text fontSize="18px" fontWeight={700}>
           Get the app
         </Text>
         <Flex gap="16px" align="center">

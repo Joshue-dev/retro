@@ -75,8 +75,8 @@ const ListingDetails = () => {
         <Flex
           align="center"
           justify="center"
-          w="100vw"
-          h={{ base: "100vh", md: "calc(100vh - 100px)" }}
+          w="full"
+            h='calc(100vh - 100px)'
         >
           <Spinner noAbsolute />
         </Flex>

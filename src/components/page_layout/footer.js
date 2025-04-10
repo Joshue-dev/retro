@@ -68,7 +68,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
         templateColumns={{
           base: "repeat(1, 1fr)",
           md: "repeat(2, 1fr)",
-          lg: "repeat(4, 1fr)",
+          lg: "repeat(3, 1fr)",
           xl: 'repeat(5, 1fr)'
         }}
         gap="24px"
@@ -147,7 +147,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
             </Text>
           </Stack>
         ) : null}
-        <Stack gap="16px">
+        <Stack display={{ base: 'none', md: 'flex' }} gap="16px">
         <Text fontSize="20px" fontWeight={600}>
           Get the app
         </Text>
@@ -167,7 +167,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
         </Flex>
       </Stack>
       </Grid>
-      {isMobile ? <Stack display={{ base: "flex", md: "none" }} gap="16px">
+      {isMobile ? <Stack gap="16px">
         <Text fontSize="20px" fontWeight={600}>
           Get the app
         </Text>

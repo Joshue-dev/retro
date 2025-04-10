@@ -21,7 +21,7 @@ export const ValidateCustomerEquity = ({
   isLoading,
 }) => {
   const [type, setType] = useState("list");
-  const [equityData, setEquityData] = useState([]);
+  const [equityData, setEquityData] = useState(null);
   const [screenWidth, setScreenWidth] = useState(0);
 
   useEffect(() => {
@@ -34,19 +34,11 @@ export const ValidateCustomerEquity = ({
   }, [equitiesData]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    setScreenWidth(window.innerWidth);
+
+    window.addEventListener("resize", () => {
       setScreenWidth(window.innerWidth);
-
-      const handleResize = () => {
-        setScreenWidth(window.innerWidth);
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }
+    });
   }, []);
  
 
@@ -179,14 +171,14 @@ export const ValidateCustomerEquity = ({
           <ModalContent
             bg="card_bg"
             maxW={{ base: '40rem',  lg: '48rem' }}
-            minH="75rem"
+            minH="calc(90vh - 10rem)"
             px="0"
             py="0"
             position={`fixed`}
             right={`9.3rem`}
             bottom={'calc(10vh - 4rem)'}
             h="fit-content"
-            maxH='75rem'
+            maxH="calc(90vh - 10rem)"
           >
             {displayTransactionSteps(type)}
           </ModalContent>

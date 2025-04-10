@@ -228,14 +228,11 @@ const RegisterForm = ({ onAuthClose, email, setPage, setEmail, ...rest }) => {
 
   return (
     <Box
-      maxW={{ md: "475px" }}
+      maxW={{ md: "533px" }}
       w={`100%`}
       bg={{ md: "card_bg" }}
       p={{ md: "24px" }}
       {...rest}
-      boxShadow={{
-        md: "0px 4px 8px -2px rgba(16, 24, 40, 0.10), 0px 2px 4px -2px rgba(16, 24, 40, 0.06)",
-      }}
       mt={{ base: 4, md: 0 }}
     >
       <Flex h="full" direction="column" align="start">

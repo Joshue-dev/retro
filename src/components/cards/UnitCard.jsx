@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Image,
+  Box,
   Stack,
   Text,
   useDisclosure,
@@ -9,11 +9,15 @@ import {
 } from "@chakra-ui/react";
 import { formatToCurrency } from "utils";
 import BuyModal from "../../pages/listing-details/units/buyModal";
+import Image from "next/image";
 
 export const UnitCard = ({ data }) => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const buyModal = useDisclosure();
-  const isSoldOut = data?.quantity < 1
+  const isSoldOut = data?.quantity < 1;
+  const DISPLAY_IMAGE = data?.profile_image
+    ? data?.profile_image
+    : data?.photos?.[0]?.photo ?? data?.photos[0]?.photo?.[0];
   return (
     <>
       {isMobile ? (
@@ -30,7 +34,7 @@ export const UnitCard = ({ data }) => {
           px="6px"
           minH={{ base: "92px", md: "72px" }}
           textAlign="center"
-          maxW={{ base: '95vw', md: 'max-content' }}
+          maxW={{ base: "95vw", md: "max-content" }}
         >
           <Text
             fontSize={{ base: "15.907px", md: "18px" }}
@@ -55,38 +59,73 @@ export const UnitCard = ({ data }) => {
           </Text>
         </VStack>
       ) : (
-        <Stack cursor='pointer' onClick={isSoldOut ? null : buyModal.onOpen} gap='20px'>
-          <Image
-            src={data?.photos[0]?.photo}
-            alt="listing image"
-            aspectRatio={"352 / 450"}
-            maxW="348.815px"
-            objectFit='cover'
-            objectPosition='center'
-          />
-          <Stack align={`start`}>
-            <Text color="text" fontSize="21.41px" textTransform={`capitalize`}>
-              {data?.unit_title || `Unit`}
-            </Text>
-            {data?.quantity < 1 ? (
+        <Stack
+          cursor="pointer"
+          onClick={isSoldOut ? null : buyModal.onOpen}
+          gap="20px"
+        >
+          <Stack
+            w="full"
+            minH="679.048px"
+            pos="relative"
+            align="center"
+            justify="end"
+            px="4rem"
+          >
+            <Image
+              src={DISPLAY_IMAGE}
+              alt={data?.unit_title || "unit image"}
+              fill
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+            <Box
+              pos="absolute"
+              bg="linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%)"
+              h="full"
+              w="full"
+            />
+            <Stack
+              justify="center"
+              textAlign="center"
+              pos="relative"
+              zIndex={5}
+              pb="48px"
+              color="#FFF"
+            >
               <Text
-                color="text"
-                fontSize="25.311px"
-                lineHeight={{ base: `1.8rem`, md: `4.0rem` }}
-                fontWeight={500}
+                fontSize="30.46px"
+                fontWeight={600}
+                textTransform={`capitalize`}
+                lineHeight="36.664px"
               >
-                Sold out
+                {data?.unit_title || `Unit`}
               </Text>
-            ) : (
-              <Text
-                color="text"
-                fontSize="25.311px"
-                lineHeight={{ base: `1.8rem`, md: `4.0rem` }}
-                fontWeight={500}
-              >
-                {formatToCurrency(data?.price || 0)}
-              </Text>
-            )}
+              {data?.quantity < 1 ? (
+                <Text
+                  color="text"
+                  fontSize="20px"
+                  lineHeight={{ base: `1.8rem`, md: `4.0rem` }}
+                  fontWeight={500}
+                >
+                  Sold out
+                </Text>
+              ) : (
+                <Text
+                  fontSize="16px"
+                  lineHeight={{ base: `1.8rem`, md: `4.0rem` }}
+                  fontWeight={500}
+                  textTransform="uppercase"
+                >
+                  Starting from:{" "}
+                  <Text as="span" fontSize="20px">
+                    {formatToCurrency(data?.price || 0)}
+                  </Text>
+                </Text>
+              )}
+            </Stack>
           </Stack>
         </Stack>
       )}

@@ -12,7 +12,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-const PendingTransactions = ({ assetData, drawer, isError, isLoading }) => {
+const PendingTransactionsDrawer = ({ assetData, drawer, isError, isLoading }) => {
   const [type, setType] = useState("list");
   const [asset, setAsset] = useState(null);
   const [amountToPay, setAmountToPay] = useState("");
@@ -196,4 +196,4 @@ const PendingTransactions = ({ assetData, drawer, isError, isLoading }) => {
   );
 };
 
-export default PendingTransactions;
+export default PendingTransactionsDrawer;

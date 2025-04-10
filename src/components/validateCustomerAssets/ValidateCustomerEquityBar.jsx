@@ -1,14 +1,14 @@
 import { HStack, Text, useDisclosure, Box, useTheme } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import DrawerValidateCustomerAssets from "../validateCustomerAssets";
 import { Button } from "/src/ui-lib";
 import { CloseIcon } from "@chakra-ui/icons";
 import cancelICon from "/src/images/icons/closeIcon.svg";
 import { fetchForCustomerEquityValidation } from "../../api/listing";
 import { ValidateAssetHomeIcon } from "../assets/svgs";
+import ValidateCustomerEquity from ".";
 
-const ValidateCustomerEquity = () => {
+const ValidateCustomerEquityBar = () => {
   const theme = useTheme()
   const [willDisplay, setWillDisplay] = useState(true);
   const fetchcustomeQuery = useQuery(
@@ -32,7 +32,7 @@ const ValidateCustomerEquity = () => {
               justify="space-between"
               p={{ base: "10px", md: "12px" }}
               minH={{ base: "48px", md: "72px" }}
-              maxH="72px"
+              maxH='max-content'
               mb={{ base: "8px", md: "15px" }}
               borderRadius={{ base: "6px", md: "12px" }}
               border="1px solid"
@@ -97,7 +97,7 @@ const ValidateCustomerEquity = () => {
               </HStack>
             </HStack>
           )}
-          <DrawerValidateCustomerAssets
+          <ValidateCustomerEquity
             equitiesData={datasToUse}
             drawer={drawerDisclosure}
             refetch={fetchcustomeQuery?.refetch}
@@ -110,4 +110,4 @@ const ValidateCustomerEquity = () => {
   );
 };
 
-export default ValidateCustomerEquity;
+export default ValidateCustomerEquityBar;

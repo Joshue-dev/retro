@@ -1,1 +1,0 @@
-export { SliderMenu } from "./SliderMenu";

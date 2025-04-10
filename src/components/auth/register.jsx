@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Box,
   Center,
   Flex,
   Heading,
   HStack,
-  Image,
+  Image as ChakraImage,
   Link,
   Stack,
   Text,
@@ -18,51 +18,39 @@ import { storeDetails } from "../../api/auth";
 import { useQuery } from "react-query";
 import PersonalInfo from "./sections/personalInfo";
 import ApprovalPending from "./sections/approvalPending";
-import PhoneImage from "images/landing-page/veritasi-phone.png";
-import AppleStoreIcon from "images/landing-page/apple-store.svg";
-import PlayStoreIcon from "images/landing-page/play-store.svg";
+import { VeritasiBanner } from "./components/banner";
+
 
 const Register = ({ onAuthClose, isAgent }) => {
   const [page, setPage] = useState("getStarted");
   const [email, setEmail] = useState("");
-  const [screenHeight, setScreenHeight] = useState(0);
 
   const STOREINFO = useQuery(["storeInfo"], storeDetails);
   const store_data = STOREINFO.data?.data?.data;
-  useLayoutEffect(() => {
-    setScreenHeight(window.innerHeight);
-    window.addEventListener("resize", () => {
-      setScreenHeight(window.innerHeight);
-    });
-  }, []);
+
+  const handle_click = (e) => {
+    e.preventDefault();
+    window.open('https://www.veritasihomes.com/')
+  }
+
   return (
-    <Flex
-      w="full"
-      h="full"
-      justify={{ base: "center", lg: "flex-end" }}
-      align={{ base: `flex-start`, lg: "center" }}
-      zIndex={2}
-      overflow="hidden"
-      maxH={{ base: '75rem', lg: 'full' }}
-    >
+    <Flex w="full" h="100%" flex={1} flexDirection="column" position="relative">
       <Flex
         flexDir={`column`}
         w={`100%`}
         gap={{ base: "10px", lg: "40px" }}
-        align={{ base: `start`, lg: "flex-end" }}
-        h={`fit-content`}
+        h="full"
+        flex={1}
+        align="start"
       >
         <HStack
           gap={{ base: "16px", lg: "9px" }}
-          display={{ base: `flex` }}
           py={{ base: "15px", lg: "25.25px" }}
           px={{ base: "15px", lg: "7rem" }}
           borderBottom={{ base: "1px solid", lg: "unset" }}
           borderBottomColor="matador_border_color.200"
-          bg="card_bg"
           w="full"
-          position="relative"
-          zIndex={999}
+          position={{ lg: "absolute" }}
         >
           <Box
             maxW="75px"
@@ -70,9 +58,11 @@ const Register = ({ onAuthClose, isAgent }) => {
             maxH="48px"
             minWidth={`48px`}
             position={`relative`}
+            cursor='pointer'
+            onClick={handle_click}
           >
             {store_data?.company_image && (
-              <Image
+              <ChakraImage
                 src={store_data?.company_image}
                 w="100%"
                 height="100%"
@@ -85,75 +75,14 @@ const Register = ({ onAuthClose, isAgent }) => {
         </HStack>
         <Stack
           direction={{ base: "column-reverse", lg: "row" }}
-          h="full"
-          align={{ lg: "center" }}
-          justify={{ lg: "flex-end" }}
-          px={{ base: "2rem", lg: "10rem" }}
+          h="100%"
+          px={{ base: "2rem", lg: 0 }}
           pt={{ base: 0, lg: 0 }}
           w="full"
-          minH={{ lg: "calc(75vh - 50px)" }}
+          flex={1}
         >
-          <Stack
-            position="absolute"
-            justify="end"
-            align="start"
-            left="3vw"
-            bottom={"5rem"}
-            display={{
-              base: "none",
-              lg:
-                (screenHeight <= 750 && screenHeight >= 500) ||
-                screenHeight >= 1200
-                  ? "none"
-                  : "flex",
-            }}
-          >
-            <Stack position='relative' mb='-5rem'   gap='16px'>
-              <Stack>
-                <Heading
-                  fontWeight={500}
-                  maxW="626px"
-                  fontFamily="Noto Sans"
-                  fontSize="72px"
-                  lineHeight="85px"
-                >
-                  One Interface,
-                  <br />
-                  <Text as="span" color="primary">
-                    All Things Veritasi
-                  </Text>
-                </Heading>
-                <Text maxW={"607px"} fontSize="20px" color="#606060">
-                  Get updates on your projects, track payments, and access all
-                  documents — all in one place.{" "}
-                </Text>
-              </Stack>
-              <HStack gap="12.505px">
-                <Link href="https://apps.apple.com/au/app/my-veritasi/id6478011265" target="_blank">
-                  <Image src={AppleStoreIcon.src} alt="apple store" />
-                </Link>
-                <Link href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi" target="_blank">
-                  <Image src={PlayStoreIcon.src} alt="play store" />
-                </Link>
-              </HStack>
-            </Stack>
-            <Stack w="full" align="center" justify="center">
-              <Image
-                src={PhoneImage.src}
-                alt=""
-                w="full"
-                maxW="26.75em"
-                h="full"
-                maxH={"47.25em"}
-                objectFit="cover"
-                align="center"
-                justifySelf="center"
-                position='relative'
-                top='4rem'
-              />
-            </Stack>
-          </Stack>
-          <Stack position="relative" zIndex={999} justify={{ lg: "center" }}>
+         <VeritasiBanner/>
+          <Stack w="full" flex={1} align="center" justify={{ lg: "center" }}>
             {page === "getStarted" && (
               <GetStarted
                 isAgent={isAgent}
@@ -216,7 +145,6 @@ const Register = ({ onAuthClose, isAgent }) => {
           </Stack>
         </Stack>
       </Flex>
-      
     </Flex>
   );
 };

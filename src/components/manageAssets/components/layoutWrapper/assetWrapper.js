@@ -1,7 +1,6 @@
 import {Box, HStack, Hide, Image, Stack, Text, useDisclosure} from '@chakra-ui/react';
 import {useRouter} from 'next/router';
 import React from 'react';
-import {MobileHamburger} from '../../../navbar/mobile_hamburger';
 import {ArrowBackIcon} from '@chakra-ui/icons';
 
 const AssetWrapper = ({children}) => {
@@ -37,11 +36,6 @@ const AssetWrapper = ({children}) => {
               Portfolio
             </Text>
           </HStack>
-          <MobileHamburger
-            onAssetClose={onAssetClose}
-            onAssetOpen={onAssetOpen}
-            isAssetOpen={isAssetOpen}
-          />
         </HStack>
         {/* </Hide> */}
         <Stack w="full" align="center" spacing={{base: '16px', xl: '0px'}}>

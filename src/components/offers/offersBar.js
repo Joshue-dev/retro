@@ -1,18 +1,15 @@
 import {
   HStack,
-  Image,
   Text,
   useDisclosure,
   Box,
-  VStack,
   useTheme,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import cancelICon from "/src/images/icons/closeIcon.svg";
 import { useQuery } from "react-query";
 import { fetchOffers } from "../../api/listing";
-import DrawerForOffers from ".";
-import offerIcon from "../../images/icons/offers-icons.svg";
+import OffersDrawer from ".";
 import { Button } from "../../ui-lib";
 import { CloseIcon } from "@chakra-ui/icons";
 import { OffersIcon } from "../assets/svgs";
@@ -39,7 +36,7 @@ export const OffersBar = () => {
               justify="space-between"
               p={{ base: "10px", md: "12px" }}
               minH={{ base: "48px", md: "72px" }}
-              maxH="72px"
+              maxH="max-content"
               mb={{ base: "8px", md: "15px" }}
               borderRadius={{ base: "6px", md: "12px" }}
               border="1px solid"
@@ -124,10 +121,10 @@ export const OffersBar = () => {
               </HStack>
             </HStack>
           )}
-          <DrawerForOffers
+          <OffersDrawer
             refetch={pendingQuery?.refetch}
             assetData={assetData}
-            isLoading={pendingQuery?.assetLoading}
+            isLoading={pendingQuery?.isLoading}
             isOpen={drawerDisclosure.isOpen}
             drawer={drawerDisclosure}
             isError={pendingQuery?.isError}

@@ -136,15 +136,24 @@ const Dispute = ({
               borderRadius={"2px"}
               w="full"
               h="155px"
-              outline="0.1px solid"
+              outline="0.5px solid"
               outlineColor={
                 theme.theme_name !== "light"
                   ? "matador_border_color.200"
                   : "matador_border_color.100"
               }
+              _focus={{
+                border: "0.5px solid",
+                borderColor:
+                  theme.theme_name !== "light"
+                    ? "matador_border_color.200"
+                    : "matador_border_color.100"
+                
+              }}
               autoFocus={false}
               ref={textRef}
               p={4}
+              fontFamily='Noto Sans'
             />
           </Box>
           <ModalFooter pb='3rem' px={0}>

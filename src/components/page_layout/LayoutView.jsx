@@ -1,18 +1,14 @@
 import {
   Box,
-  Center,
-  HStack,
   Image,
-  Link,
   Stack,
-  Text,
   useTheme,
 } from "@chakra-ui/react";
-import { Navbar } from "../navbar";
 import { storeDetails } from "@/api/auth";
 import { useQuery } from "react-query";
 import WhatsappIcon from "/src/images/icons/whatsapp_icon.svg";
 import { Footer } from "./footer";
+import { Navbar } from "../navbar";
 
 export const LayoutView = ({
   children,
@@ -48,6 +44,7 @@ export const LayoutView = ({
       <Box
         flex={1}
         h="full"
+        minH='100vh'
         w={"100%"}
         px={noPadding ? "0" : { base: "20px", lg: "100px" }}
         pb={{ base: "50px", xl: "51.5px" }}

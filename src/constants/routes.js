@@ -4,8 +4,8 @@ export const BUSINESS_ID = () =>
   appWindow && localStorage && JSON?.parse(localStorage.getItem("businessId"));
 // : global?.location?.reload();
 
-export const BaseURL_ONE = "https://api.veritasihomes.com/v1";
-export const BaseURL_TWO = "https://api.veritasihomes.com/v2";
+export const BaseURL_ONE = "https://api.matadortrust.com/v1";
+export const BaseURL_TWO = "https://api.matadortrust.com/v2";
 export const ROUTES = {};
 
 export const EXTERNAL_ROUTES = {};

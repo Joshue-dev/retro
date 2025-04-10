@@ -5,7 +5,7 @@ import PaymentDrawer from './payment';
 import Breakdown from './Breakdown';
 import { Drawer, DrawerContent, DrawerOverlay, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 
-const PendingTransactions = ({assetData, drawer, isError, isLoading}) => {
+const OffersDrawer = ({assetData, drawer, isError, isLoading}) => {
   const [type, setType] = useState('');
   const [asset, setAsset] = useState(null);
   const [amountToPay, setAmountToPay] = useState('');
@@ -159,7 +159,7 @@ const PendingTransactions = ({assetData, drawer, isError, isLoading}) => {
           <ModalContent
             bg="card_bg"
             maxW={{ base: '40rem',  lg: '48rem' }}
-            minH="75rem"
+            minH="calc(90vh - 10rem)"
             px="0"
             py="0"
             position={`fixed`}
@@ -176,4 +176,4 @@ const PendingTransactions = ({assetData, drawer, isError, isLoading}) => {
   );
 };
 
-export default PendingTransactions;
+export default OffersDrawer;

@@ -5,7 +5,7 @@ import { BiMenu } from "react-icons/bi";
 import { FaRegBell } from "react-icons/fa";
 import notificationIcon from "../../images/icons/notification.svg";
 
-export const MobileHeader = ({
+const MobileHeader = ({
   activePage,
   onDrawerOpen,
   onDrawerClose,
@@ -19,7 +19,7 @@ export const MobileHeader = ({
     <Flex
       display={{ base: "flex", md: "none" }}
       mb="10px"
-      px={"48px"}
+      px={"32px"}
       w="full"
       bg='card_bg'
       justify={"space-between"}
@@ -28,6 +28,7 @@ export const MobileHeader = ({
       direction={"row"}
       borderBottom='0.4px solid'
       borderBottomColor={theme.theme_name !== 'light' ? 'matador_border_color.200' : "matador_border_color.300"}
+      
       {...rest}
     >
       <Flex align={"center"} maxW='90%' gap="10px" justify={"center"}>

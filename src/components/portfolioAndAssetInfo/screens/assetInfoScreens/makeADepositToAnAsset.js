@@ -1,8 +1,6 @@
 import {
-  Button,
   Divider,
   DrawerCloseButton,
-  DrawerFooter,
   Flex,
   HStack,
   Spinner,
@@ -22,11 +20,7 @@ import { useAssetPayment } from "../../../../ui-lib/ui-lib.hooks";
 import angledArrow from "/src/images/icons/backIconForAsset.svg";
 import copyIcon from "/src/images/icons/copyIcon.svg";
 import copiedIcon from "/src/images/icons/copied_icon.svg";
-import useLocalStorage from "utils/hooks/useLocalStorage";
 import { AccountErrorState } from "@/components/appState/account-state";
-import ListCards from "pages/listing-details/units/buyModalComponents/cardsScreen";
-import { fetchSavedCards } from "@/api/payment";
-import { useQuery } from "react-query";
 
 const MakeADepositToAnAsset = ({
   info,
@@ -37,19 +31,9 @@ const MakeADepositToAnAsset = ({
 }) => {
   const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
-  const [walletPay, setWalletPay] = useState(false);
-  const [cardPay, setCardPay] = useState(false)
   const theme = useTheme();
   const isDarkMode = theme.theme_name !== "light";
   const [isBelowMd] = useMediaQuery("(max-width:540px)");
-  const [storeThemeInfo] = useLocalStorage("storeThemeInfo");
-  const isWalletEnabled = storeThemeInfo?.isWalletEnabled;
-  const isGatewayEnabled = storeThemeInfo?.isGatewayEnabled;
-  const { data, isLoading: fetchingCard } = useQuery(
-    ["cardSaved"],
-    fetchSavedCards
-  );
-  const [selectedCard, setSelectedCard] = useState(null);
   const paymentType = "deposit";
 
   const paymentDetails = {
@@ -60,22 +44,17 @@ const MakeADepositToAnAsset = ({
   };
 
   const {
-    handlePayFromWallet,
     handleBankTransfer,
     isLoading,
     transferDetails,
     setTransferDetails,
-    handlePaywithCard,
-    isError,
-    isAboveLimit
-  } = useAssetPayment({
+    isError  } = useAssetPayment({
     paymentType,
     refetch,
     amountToPay: Number(inputValue) > 0 ? inputValue : amountToPay,
     modal: null,
     paymentDetails,
     asset_id: info?.project?.id,
-    walletPay,
   });
 
   const { hasCopied, onCopy } = useClipboard(
@@ -95,12 +74,6 @@ const MakeADepositToAnAsset = ({
     }
   }, []);
 
-  useEffect(() => {
-    if (walletPay && isError) {
-      setWalletPay(false);
-    }
-  }, [isError, walletPay]);
-
   const hasMultiAccounts = Array.isArray(transferDetails);
 
   const handleBackNavigation = () => {
@@ -114,18 +87,6 @@ const MakeADepositToAnAsset = ({
     setInputValue("");
     setTransferDetails(null);
   };
-
-  const handleWalletPay = () => {
-    setWalletPay(true);
-    handlePayFromWallet();
-  };
-
-  const handleCardPay = () => {
-    setCardPay(true);
-    handlePaywithCard();
-  };
-
-  const allowCardPay = !isAboveLimit && data?.data?.results?.length > 0;
 
   return (
     <>
@@ -174,9 +135,7 @@ const MakeADepositToAnAsset = ({
             fontWeight={400}
             color={theme.theme_name !== "light" ? "text" : "#757373"}
           >
-            {!walletPay || !cardPay
-              ? `Generating account number, please wait a moment...`
-              : `Processing Transaction, please wait a moment...`}
+          Generating account number, please wait a moment...
           </Text>
         </Flex>
       ) : null}
@@ -227,7 +186,10 @@ const MakeADepositToAnAsset = ({
               transferDetails?.length > 0 ? (
                 <Stack
                   overflowY="auto"
-                  maxH={{ base: "25vh", md: "17.5rem" }}
+                  maxH={{
+                    base: isLoading ? "47.5vh" : "55vh",
+                    md: isLoading ? "30rem" : "40.5rem",
+                  }}
                   sx={customScrollbarStyles()}
                   gap="12px"
                 >
@@ -425,75 +387,8 @@ const MakeADepositToAnAsset = ({
               <AccountErrorState isError={isError} />
             )}
           </Box>
-          {isGatewayEnabled && <ListCards
-            data={data}
-            fetchingCard={fetchingCard}
-            selectedCard={selectedCard}
-            setSelectedCard={setSelectedCard}
-            isLoading={isLoading}
-          />}
         </Stack>
       </Stack>
-      {isGatewayEnabled ? (
-        <DrawerFooter
-          p={{ md: "1.6px 26.7px 26.7px", base: "0px 23.9px 23.9px" }}
-          gap={4}
-        >
-          {isWalletEnabled && <Button
-            w='full'
-            h={{ base: "48px", md: "54px" }}
-            fontSize='14px'
-            borderRadius="0px"
-            bg={
-              theme.theme_name !== "light"
-                ? "matador_background.100"
-                : "card_bg"
-            }
-            fontWeight="400"
-            color="#FFFFFF"
-            _hover={{
-              opacity: 1,
-            }}
-            _focus={{
-              opacity: 1,
-            }}
-            _active={{
-              opacity: 1,
-            }}
-            onClick={handleWalletPay}
-            borderColor={
-              theme.theme_name !== "light"
-                ? "matador_border_color.200"
-                : "matador_border_color.300"
-            }
-          >
-            PAY WITH WALLET
-          </Button>}
-          {Boolean(allowCardPay) && (
-            <Button
-              h={{ base: "48px", md: "54px" }}
-              fontSize="14px"
-              fontWeight="500"
-              w="full"
-              bg="primary"
-              border="1px solid"
-              borderColor={
-                theme.theme_name !== "light"
-                  ? "matador_border_color.200"
-                  : "matador_border_color.300"
-              }
-              color="text"
-              textTransform="uppercase"
-              isDisabled={!selectedCard}
-              onClick={handleCardPay}
-              rounded={0}
-              _hover={{ bg: "primary" }}
-            >
-              Pay With Card
-            </Button>
-          )}
-        </DrawerFooter>
-      ) : null}
     </>
   );
 };

@@ -27,11 +27,18 @@ import { fetchSavedCards } from "@/api/payment";
 import { useQuery } from "react-query";
 import { customScrollbarStyles } from "@/components/portfolioAndAssetInfo/screens/assetInfoScreens/makeADepositToAnAsset";
 
-const PaymentDrawer = ({ asset, drawer, amountToPay, selectedCard, setSelectedCard }) => {
+const PaymentDrawer = ({
+  asset,
+  drawer,
+  amountToPay,
+  selectedCard,
+  setSelectedCard,
+}) => {
   const paymentType = "deposit";
   const [storeThemeInfo] = useLocalStorage("storeThemeInfo");
   const isWalletEnabled = storeThemeInfo?.isWalletEnabled;
-  const isGatewayEnabled = storeThemeInfo?.isGatewayEnabled;
+  const isGatewayEnabled =
+    storeThemeInfo?.isGatewayEnabled && storeThemeInfo?.isWalletEnabled;
   const paymentDetails = {
     amount_to_pay: Number(amountToPay),
     equity_id: asset?.id,
@@ -39,7 +46,7 @@ const PaymentDrawer = ({ asset, drawer, amountToPay, selectedCard, setSelectedCa
     pending: true,
   };
   const [walletPay, setWalletPay] = useState(false);
-  
+
   const { data, isLoading: fetchingCard } = useQuery(
     ["cardSaved"],
     fetchSavedCards
@@ -60,7 +67,7 @@ const PaymentDrawer = ({ asset, drawer, amountToPay, selectedCard, setSelectedCa
     paymentDetails,
     walletPay,
     asset_id: asset?.project?.id,
-    auth_code: selectedCard?.authorization_code
+    auth_code: selectedCard?.authorization_code,
   });
   const theme = useTheme();
   const isDarkMode = theme.theme_name !== "light";
@@ -403,67 +410,71 @@ const PaymentDrawer = ({ asset, drawer, amountToPay, selectedCard, setSelectedCa
                 <AccountErrorState isError={isError} />
               )}
             </Stack>
-            {isGatewayEnabled && <ListCards
-            data={data}
-            fetchingCard={fetchingCard}
-            selectedCard={selectedCard}
-            setSelectedCard={setSelectedCard}
-            isLoading={isLoading}
-          />}
-          </Stack>
-          {isGatewayEnabled && <ModalFooter gap={6} pb={{ base: 4, md: 0 }} px="24px" w="full">
-            {isWalletEnabled && (
-              <Button
-                h="54px"
-                fontSize="14px"
-                fontWeight="500"
-                w="full"
-                bg={
-                  theme.theme_name !== "light"
-                    ? "matador_background.100"
-                    : "card_bg"
-                }
-                border="1px solid"
-                borderColor={
-                  theme.theme_name !== "light"
-                    ? "matador_border_color.200"
-                    : "matador_border_color.300"
-                }
-                color="text"
-                textTransform="uppercase"
-                isDisabled={isLoading}
-                onClick={handleWalletPay}
-                rounded={0}
-                _hover={{ color: "primary" }}
-              >
-                Pay With Wallet
-              </Button>
-            )}
-            {Boolean(allowCardPay) > 0 && (
-              <Button
-                h="54px"
-                fontSize="14px"
-                fontWeight="500"
-                w="full"
-                bg="primary"
-                border="1px solid"
-                borderColor={
-                  theme.theme_name !== "light"
-                    ? "matador_border_color.200"
-                    : "matador_border_color.300"
-                }
-                color="#FFF"
-                textTransform="uppercase"
-                isDisabled={!selectedCard}
-                onClick={handleCardPay}
-                rounded={0}
-                _hover={{ bg: "primary" }}
+            {isGatewayEnabled && data?.data?.results?.length > 0 && (
+              <ListCards
+                data={data}
+                fetchingCard={fetchingCard}
+                selectedCard={selectedCard}
+                setSelectedCard={setSelectedCard}
                 isLoading={isLoading}
-              >
-                Pay With Card
-              </Button>
+              />
             )}
-          </ModalFooter>}
+          </Stack>
+          {isGatewayEnabled ? (
+            <ModalFooter gap={6} pb={{ base: 4, md: 0 }} px="24px" w="full">
+              {Boolean(isWalletEnabled) && (
+                <Button
+                  h="54px"
+                  fontSize="14px"
+                  fontWeight="500"
+                  w="full"
+                  bg={
+                    theme.theme_name !== "light"
+                      ? "matador_background.100"
+                      : "card_bg"
+                  }
+                  border="1px solid"
+                  borderColor={
+                    theme.theme_name !== "light"
+                      ? "matador_border_color.200"
+                      : "matador_border_color.300"
+                  }
+                  color="text"
+                  textTransform="uppercase"
+                  isDisabled={isLoading}
+                  onClick={handleWalletPay}
+                  rounded={0}
+                  _hover={{ color: "primary" }}
+                >
+                  Pay With Wallet
+                </Button>
+              )}
+              {Boolean(allowCardPay) > 0 && (
+                <Button
+                  h="54px"
+                  fontSize="14px"
+                  fontWeight="500"
+                  w="full"
+                  bg="primary"
+                  border="1px solid"
+                  borderColor={
+                    theme.theme_name !== "light"
+                      ? "matador_border_color.200"
+                      : "matador_border_color.300"
+                  }
+                  color="#FFF"
+                  textTransform="uppercase"
+                  isDisabled={!selectedCard}
+                  onClick={handleCardPay}
+                  rounded={0}
+                  _hover={{ bg: "primary" }}
+                  isLoading={isLoading}
+                >
+                  Pay With Card
+                </Button>
+              )}
+            </ModalFooter>
+          ) : null}
         </Flex>
       </Stack>
     </Stack>

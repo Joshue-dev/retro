@@ -1,14 +1,9 @@
 import {
-  Image,
   VStack,
   Text,
   Flex,
   Box,
   Center,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  HStack,
   useTheme,
   Stack,
 } from "@chakra-ui/react";
@@ -97,9 +92,7 @@ const TransactionsList = ({
       >
         <Box px="24px" pb="38px" h={"fit-content"} overflowY={"auto"}>
           {isLoading ? (
-            <VStack w="80vw">
-              <Spinner />
-            </VStack>
+            <Spinner size={{ base: '75vh', md: '58vh' }} noAbsolute />
           ) : isError ? (
             <ErrorState />
           ) : (

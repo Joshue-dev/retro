@@ -115,9 +115,7 @@ const TransactionsList = ({
       >
         <Box px="24px" pb="38px" h={"fit-content"}>
           {isLoading ? (
-            <VStack w="80vw">
-              <Spinner />
-            </VStack>
+            <Spinner size={{ base: '75vh', md: '58vh' }} noAbsolute />
           ) : isError ? (
             <ErrorState />
           ) : (

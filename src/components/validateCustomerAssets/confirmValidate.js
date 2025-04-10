@@ -5,14 +5,13 @@ import {
   HStack,
   useTheme,
 } from "@chakra-ui/react";
-// import { Button, CustomizableButton } from "../../ui-lib";
+import { Button, CustomizableButton } from "../../ui-lib";
 import { useMutation } from "react-query";
 import { PostForCustomerEquityValidationoOrDispute } from "../../api/listing";
 import { toastForError } from "../../utils/toastForErrors";
 import { ChevronLeftIcon, CloseIcon } from "@chakra-ui/icons";
 import { useToastForRequest } from "ui-lib/ui-lib.hooks/useToast";
 import { ValidateIcon } from "assets/notifications";
-import { Button, CustomizableButton } from "ui-lib/ui-lib.components";
 
 const ConfirmValidate = ({
   validation_requestsId,

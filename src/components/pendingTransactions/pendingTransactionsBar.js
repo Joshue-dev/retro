@@ -10,12 +10,12 @@ import {
 import React, { useState } from "react";
 import cancelICon from "/src/images/icons/closeIcon.svg";
 import { useQuery } from "react-query";
-import DrawerForPendingTransaction from "../pendingTransactions";
 import { Button } from "/src/ui-lib";
 import pendingTransaction from "../../images/icons/pending_transaction_bar.svg";
 import { CloseIcon } from "@chakra-ui/icons";
 import { fetchUserEquity } from "../../api/listing";
 import { PendingTransactionBarSVG } from "../assets/svgs";
+import PendingTransactionsDrawer from ".";
 
 export const PendingTransactionsBar = () => {
   const theme = useTheme()
@@ -43,7 +43,7 @@ export const PendingTransactionsBar = () => {
               justify="space-between"
               p={{ base: "10px", md: "12px" }}
               minH={{ base: "48px", md: "72px" }}
-              maxH="72px"
+              maxH="max-content"
               mb={{ base: "8px", md: "15px" }}
               borderRadius={{ base: "6px", md: "12px" }}
               border="1px solid"
@@ -111,10 +111,10 @@ export const PendingTransactionsBar = () => {
               </HStack>
             </HStack>
           )}
-          <DrawerForPendingTransaction
+          <PendingTransactionsDrawer
             refetch={pendingQuery?.refetch}
             assetData={assetData}
-            isLoading={pendingQuery?.assetLoading}
+            isLoading={pendingQuery?.isLoading}
             isOpen={drawerDisclosure.isOpen}
             drawer={drawerDisclosure}
             isError={pendingQuery?.isError}

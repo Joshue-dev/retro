@@ -26,23 +26,12 @@ import useLocalStorage from "utils/hooks/useLocalStorage";
 
 const CardLoadingState = () => {
   return (
-    <Flex
-      overflow="hidden"
-      flexDir={`column`}
-      gap={`22px`}
+    <Skeleton
+      h="326px"
       w="full"
-      maxW={`815px`}
-      borderRadius={`18px`}
-    >
-      <Skeleton
-        minH={{ base: '240.9px', md: "389.785px"}}
-        maxH={{ base: '240.9px', md: "389.785px"}}
-        // aspectRatio={{ base: "815  / 277" }}
-        w="full"
-        startColor="rgba(0,0,0,.3)"
-        endColor="rgba(0,0,0,.5)"
-      />
-    </Flex>
+      startColor="rgba(0,0,0,.3)"
+      endColor="rgba(0,0,0,.5)"
+    />
   );
 };
 
@@ -61,6 +50,8 @@ export const ListingCard = ({ is_loading, data }) => {
     maps_view,
     is_sold_out,
     display_price,
+    fraction_is_available,
+    payment_plan_is_available: isPaymentPlanAvailable
   } = data;
 
   const showPreview = useDisclosure();
@@ -71,55 +62,80 @@ export const ListingCard = ({ is_loading, data }) => {
     <CardLoadingState />
   ) : (
     <>
-<Stack
-      w="full"
-      gap="20px"
-      onClick={() => router.push(`/listing-details/${id}`)}
-      cursor="pointer"
-    >
-      <Box w="full" position="relative" overflow="hidden">
-        <Box
-          bgImage={`linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%), url(${photos[0]?.photo})`}
-          bgSize='cover'
-          bgPos='center'
-          w="full"
-          h="full"
-          minH={{ base: '240.9px', md: "389.785px"}}
-          maxH={{ base: '240.9px', md: "389.785px"}}
-          loading="lazy"
-          objectFit="cover"
-        />
-        <Stack
-          align="start"
-          justify="center"
-          gap="12px"
-          position="absolute"
-          bottom={0}
-          p="20px"
-          color="#FFF"
-          w="full"
-          divider={<StackDivider m="0 !important" />}
-        >
-          <Text fontSize="24px" letterSpacing='0.24px' textTransform="uppercase">
+      <Stack
+        w="full"
+        gap="20px"
+        onClick={() => router.push(`/listing-details/${id}`)}
+        cursor="pointer"
+      >
+        <Box w="full" position="relative" overflow="hidden">
+          <Image
+            src={current_photo}
+            w="full"
+            h="full"
+            minH="326px"
+            maxH="326px"
+            loading="lazy"
+            objectFit="cover"
+          />
+          {fraction_is_available || isPaymentPlanAvailable ? (
+            <Stack
+              bg="primary"
+              p="7.468px 14.861px 9.532px 15.139px"
+              h="40px"
+              justify="center"
+              align="center"
+              position="absolute"
+              color="#FFF"
+              top={0}
+            >
+              <Text
+                textTransform="uppercase"
+                fontSize="11.022px"
+                letterSpacing="1.781px"
+              >
+                {fraction_is_available
+                  ? "fractional"
+                  : "payment plan available"}
+              </Text>
+            </Stack>
+          ) : null}
+          {!fraction_is_available && is_sold_out ? (
+            <Stack
+              bg="primary"
+              p="7.468px 14.861px 9.532px 15.139px"
+              h="40px"
+              justify="center"
+              align="center"
+              position="absolute"
+              color="#FFF"
+              top={0}
+            >
+              <Text
+                textTransform="uppercase"
+                fontSize="11.022px"
+                letterSpacing="1.781px"
+              >
+                Sold out
+              </Text>
+            </Stack>
+          ) : null}
+        </Box>
+        <Stack align="start" justify="center" gap="12px" color="text">
+          <Text fontSize="20.204px" textTransform="uppercase">
             {name}
           </Text>
-          <HStack divider={<StackDivider />} gap="20px">
-            {maps_view && (
-              <Text letterSpacing="0.16px" fontSize="16px">
-                {address}
-              </Text>
-            )}
-            <Text letterSpacing="0.16px" fontSize="16px">
-              {is_sold_out
-                ? "Sold out"
-                : display_price
-                ? `Starting from ${formatToCurrency(starting_from)}`
-                : "Contact for price"}
+          {maps_view && (
+            <Text
+              textTransform="uppercase"
+              letterSpacing="1.781px"
+              fontSize="12px"
+            >
+              {address}
             </Text>
-          </HStack>
+          )}
         </Stack>
-      </Box>
-    </Stack>
+      </Stack>
       <AssetImagePreview
         slideImages={photos || []}
         showPreview={showPreview}

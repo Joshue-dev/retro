@@ -1,50 +1,33 @@
 import React from "react";
-import { Center, Flex, Icon, Image, Text } from "@chakra-ui/react";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import {
   VStack,
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  DrawerBody,
-  Divider,
 } from "@chakra-ui/react";
 import logoMobile from "../../images/mobile-logo-white.png";
 import { Button } from "../../ui-lib";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
-import { FaFileLines } from "react-icons/fa6";
-import { PiMagnifyingGlassFill } from "react-icons/pi";
 import { useRouter } from "next/router";
-import ProfileIcon from "../../images/icons/user-profile.svg";
-
-import feedbackIcon from "../../images/navar/feedback.svg";
-import suggestIcon from "../../images/navar/suggest.svg";
-import reportBugIcon from "../../images/navar/reportBug.svg";
-import termsIcon from "../../images/navar/terms.svg";
-import logoutIcon from "../../images/navar/logout.svg";
 import settingIcon from "../../images/navar/settings.svg";
-
-import { BiMessageAltAdd, BiSolidMessageDetail } from "react-icons/bi";
 import useGetSession from "utils/hooks/getSession";
 import { deleteCookies } from "utils/sessionmanagers";
+import useLocalStorage from "utils/hooks/useLocalStorage";
 
 export const MobileDrawerComp = ({
-  feedBackModal,
-  reportBugModal,
-  suggestModal,
-  onNotOpen,
   onAssetOpen,
-  onWatchOpen,
   onWalOpen,
   isDrawerOpen,
   onDrawerClose,
-  avatar,
   TERMS,
   PRIVACY_POLICY,
 }) => {
   const router = useRouter();
   const { sessionData: LoggedinUser } = useGetSession("loggedIn");
-
+  const [storeThemeInfo] = useLocalStorage('storeThemeInfo');
+  const isGatewayEnabled = storeThemeInfo?.isGatewayEnabled && storeThemeInfo?.isWalletEnabled
   const auth_data = [
     {
       key: "myAssets",
@@ -54,14 +37,15 @@ export const MobileDrawerComp = ({
         onAssetOpen();
       },
     },
-    // {
-    //   key: "wallet",
-    //   title: "Wallet",
-    //   onClick: () => {
-    //     onDrawerClose();
-    //     onWalOpen();
-    //   },
-    // },
+    ...(isGatewayEnabled
+      ? [
+          {
+            key: "wallet",
+            title: "Wallet",
+            onClick: () => onWalOpen(),
+          },
+        ]
+      : []),
   ];
 
   const dropdown_data = [
@@ -161,20 +145,8 @@ export const MobileDrawerComp = ({
                   </Text>
                 </Flex>
               ))}
-
-              {/* <Flex align={'center'} gap='12px' mt='50px'>
-                <Image h='full' src={reportBugIcon?.src} />
-                <Text
-                  cursor={'pointer'} onClick={() => router.push('/theme-toggler')}
-                  color='text' fontSize={'16px'} fontWeight={400}
-                >
-                  Change Theme
-                </Text>
-              </Flex> */}
             </VStack>
-
             <Flex align={"center"} gap="12px" p="16px">
-              {/* <Image h="full" src={logoutIcon?.src} /> */}
               <Text
                 cursor={"pointer"}
                 onClick={handleLogout}

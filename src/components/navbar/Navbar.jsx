@@ -6,10 +6,11 @@ import {
   useDisclosure,
   Box,
   Icon,
-  Center,
   Button,
   useTheme,
   Stack,
+  Progress,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,10 +18,8 @@ import MobileDrawer from "./mobile_drawer";
 import { useQuery } from "react-query";
 import { BiMenu } from "react-icons/bi";
 import { storeDetails } from "../../api/auth";
-import { LIGHT } from "../../constants/names";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { getSettingsData } from "../../api/Settings";
-import { appCurrentTheme } from "../../utils/localStorage";
 import { useLightenHex } from "utils/lightenColorShade";
 import { LuDot } from "react-icons/lu";
 import dropdownIcon from "../../images/icons/dropdown_icon.svg";
@@ -28,21 +27,21 @@ import notificationIcon from "../../images/icons/notification.svg";
 import moment from "moment";
 import { fetchNotifs } from "@/api/FetchNotif";
 import ProfileMenu from "./profile_menu";
-import { Notification } from "../notification_drawer";
 import { Wallet } from "../wallet_drawer";
-import Feedback from "../feedback/feedback";
-import { ReportBug } from "../report_bug";
-import { SuggestIdea } from "../suggest_idea";
 import isMobile from "../../utils/extras";
 import PortfolioAndAssetProfile from "../portfolioAndAssetInfo";
-import { useState } from "react";
-import ProfileIcon from "../../images/icons/user-profile.svg";
-import ProfileIconLight from "../../images/icons/user-profile-light.png";
 import { motion } from "framer-motion";
 import useGetSession from "utils/hooks/getSession";
+import { fetchProjectsWithFilters } from "@/api/listing";
+import useLocalStorage from "utils/hooks/useLocalStorage";
+import { useEffect, useMemo, useState } from "react";
+import Notification from "../notification_drawer";
 
 export const Navbar = ({ navBarStyle, activePage }) => {
   const { sessionData: LoggedinUser } = useGetSession("loggedIn");
+  const [showProgress, setShowProgress] = useState(false);
+  const [isMobile] = useMediaQuery('(max-width: 991px)')
+  const [time, setTime] = useState("");
   const settingsQuery = useQuery(
     ["getSettingsData", "profile"],
     () => getSettingsData({ profile: true }),
@@ -51,6 +50,9 @@ export const Navbar = ({ navBarStyle, activePage }) => {
     }
   );
   const avatar = settingsQuery?.data?.data?.data?.avatar;
+  const [storeThemeInfo] = useLocalStorage("storeThemeInfo");
+  const isGatewayEnabled =
+    storeThemeInfo?.isGatewayEnabled && storeThemeInfo?.isWalletEnabled;
   const STOREINFO = useQuery(["storeInfo"], storeDetails);
   const store_data = STOREINFO.data?.data?.data;
 
@@ -58,7 +60,17 @@ export const Navbar = ({ navBarStyle, activePage }) => {
   const PRIVACY_POLICY = store_data?.customer_privacy_policy;
   const notifications = useQuery(["notifs"], fetchNotifs);
 
-  const useLightItems = appCurrentTheme == LIGHT;
+  const projects = useQuery(
+    ["projects", "&page=1&limit=4"],
+    () => fetchProjectsWithFilters("&page=1&limit=4"),
+    {
+      enabled: !!LoggedinUser, // Only run the query if LoggedinUser is available
+      staleTime: Infinity, // Keep the data fresh indefinitely
+    }
+  );
+
+  const singleListing = projects?.data?.project?.[0];
+  const hasSingleListing = projects?.data?.count === 1;
 
   const router = useRouter();
   const {
@@ -77,15 +89,12 @@ export const Navbar = ({ navBarStyle, activePage }) => {
     onOpen: onAssetOpen,
     onClose: onAssetClose,
   } = useDisclosure();
-  const {
-    isOpen: isWatchOpen,
-    onOpen: onWatchOpen,
-    onClose: onWatchClose,
-  } = useDisclosure();
-  const feedBackModal = useDisclosure();
-  const reportBugModal = useDisclosure();
-  const suggestModal = useDisclosure();
+  const { onOpen: onWatchOpen } = useDisclosure();
   const profileModal = useDisclosure();
+  const propertiesPage = hasSingleListing
+    ? `/listing-details/${singleListing?.id}`
+    : "/properties";
+  const openOnLaunch = router.pathname === propertiesPage;
 
   const notifBox = () => {
     return (
@@ -119,11 +128,15 @@ export const Navbar = ({ navBarStyle, activePage }) => {
       title: "Portfolio",
       onClick: () => onAssetOpen(),
     },
-    // {
-    //   key: "wallet",
-    //   title: "Wallet",
-    //   onClick: () => onWalOpen(),
-    // },
+    ...(isGatewayEnabled
+      ? [
+          {
+            key: "wallet",
+            title: "Wallet",
+            onClick: () => onWalOpen(),
+          },
+        ]
+      : []),
     {
       key: "notification",
       component: notifBox,
@@ -134,32 +147,77 @@ export const Navbar = ({ navBarStyle, activePage }) => {
   const primaryColor = theme.colors.primary;
   const { lightenHex } = useLightenHex(primaryColor);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(moment().format("HH:mm"));
+    }, 1000);
+
+    return () => clearInterval(interval); // Clean up the interval on component unmount
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return; // ✅ only run in browser
+  
+    if (window.innerWidth > 991 && router.pathname === propertiesPage) {
+      onAssetOpen();
+    }
+  }, []);  
+
+  const mainLink = useMemo(() => {
+    if (!LoggedinUser) {
+      return "/";
+    }
+    if (hasSingleListing) {
+      return `/listing-details/${singleListing?.id}`;
+    }
+    return "/properties";
+  }, [LoggedinUser, hasSingleListing, projects?.isLoading]);
+
+  useEffect(() => {
+    router?.events?.on("routeChangeStart", (url) => {
+      setShowProgress(true);
+    });
+    router?.events?.on("routeChangeComplete", (url) => {
+      setShowProgress(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
-      <Flex
-        display={{ base: "none", lg: "flex" }}
+      <Box
+        display={{ base: "none", lg: "block" }}
         color="text"
         mr="auto"
         alignItems={"center"}
         justify={"space-between"}
         w="full"
-        bg={theme.theme_name !== "light" ? "background" : "card_bg"}
-        px={"100px"}
-        py={`25px`}
         zIndex={100}
         {...navBarStyle?.desktop}
         position={"fixed"}
         top={`0px`}
-        borderBottom="1px solid"
-        borderBottomColor={
-          theme.theme_name !== "light"
-            ? "matador_border_color.200"
-            : "matador_border_color.300"
-        }
         mb=".5rem"
       >
-        <Link href={LoggedinUser ? "/properties" : "/"}>
-          <HStack gap={"20px"}>
+        <Flex
+          justify="space-between"
+          align="center"
+          w="full"
+          pos="relative"
+          borderBottom="1px solid"
+          borderBottomColor={
+            theme.theme_name !== "light"
+              ? "matador_border_color.200"
+              : "matador_border_color.300"
+          }
+          bg={theme.theme_name !== "light" ? "background" : "card_bg"}
+          px={"100px"}
+          py={`25px`}
+        >
+          <HStack
+            gap={"20px"}
+            onClick={projects?.isLoading ? null : () => router.push(mainLink)}
+            cursor="pointer"
+          >
             <Box
               maxW="90px"
               h="46px"
@@ -179,132 +237,108 @@ export const Navbar = ({ navBarStyle, activePage }) => {
               )}
             </Box>
           </HStack>
-        </Link>
-        {LoggedinUser && (
-          <>
-            <Flex pl="10vw" align={"center"} justify={"center"} gap={`42px`}>
-              {auth_data.map((item) =>
-                item.component ? (
-                  item.component()
-                ) : (
-                  <Text
-                    fontFamily={"Noto Sans"}
-                    key={item.key}
-                    cursor="pointer"
-                    onClick={item.onClick}
-                    fontSize="14px"
-                    textTransform={"capitalize"}
-                    fontWeight={400}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    color={"text"}
-                  >
-                    {item.title}
-                  </Text>
-                )
-              )}
-            </Flex>
-            <Flex justify="center" align="center" gap={"20px"}>
-              <Flex gap="4px" align="center">
-                <Text fontSize="15px">{moment().format("HH:mm")}</Text>
-                <LuDot fontSize={32} color="text" />
-                <Text whiteSpace="nowrap" fontSize="15px">
-                  {moment().format("ddd, MMM DD")}
-                </Text>
-              </Flex>
-              <Button
-                borderRadius={"full"}
-                bg={
-                  theme.theme_name !== "light"
-                    ? "listing_card.background"
-                    : "background"
-                }
-                p={3}
-                color={"primary"}
-                gap={0}
-                as={motion.div}
-                align={"center"}
-                justifyContent={"center"}
-                cursor={"pointer"}
-                fontWeight={600}
-                onClick={profileModal.onOpen}
-                h="full"
-                _hover={{
-                  bg: "",
-                }}
-                leftIcon={
-                  <Stack
-                    align="center"
-                    justifyContent="center"
-                    boxSize="35px"
-                    rounded="full"
-                    bg="primary"
-                    textAlign="center"
-                  >
+          {LoggedinUser && (
+            <>
+              <Flex pl="10vw" align={"center"} justify={"center"} gap={`42px`}>
+                {auth_data.map((item) =>
+                  item.component ? (
+                    item.component()
+                  ) : (
                     <Text
-                      textAlign="center"
-                      textTransform="capitalize"
-                      fontSize="20px"
-                      color="#FFF"
+                      fontFamily={"Noto Sans"}
+                      key={item.key}
+                      cursor="pointer"
+                      onClick={item.onClick}
+                      fontSize="14px"
+                      textTransform={"capitalize"}
+                      fontWeight={400}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      color={"text"}
                     >
-                      {LoggedinUser?.first_name?.charAt(0)}
+                      {item.title}
                     </Text>
-                  </Stack>
-                }
-                rightIcon={
-                  <Image
-                    src={dropdownIcon.src}
-                    alt=""
-                    filter={theme.theme_name !== "light" ? "invert(1)" : ""}
-                  />
-                }
-                border="1px solid"
-                borderColor={
-                  theme.theme_name !== "light"
-                    ? "matador_border_color.200"
-                    : "matador_border_color.300"
-                }
-              />
-            </Flex>
-            <Notification
-              onDrawerOpen={mobileModal.onOpen}
-              isNotOpen={isNotOpen}
-              onNotClose={onNotClose}
-              notifications={notifications}
+                  )
+                )}
+              </Flex>
+              <Flex justify="center" align="center" gap={"20px"}>
+                <Flex gap="4px" align="center">
+                  <Text fontSize="15px">{time}</Text>
+                  <LuDot fontSize={32} color="text" />
+                  <Text whiteSpace="nowrap" fontSize="15px">
+                    {moment().format("ddd, MMM DD")}
+                  </Text>
+                </Flex>
+                <Button
+                  borderRadius={"full"}
+                  bg={
+                    theme.theme_name !== "light"
+                      ? "listing_card.background"
+                      : "background"
+                  }
+                  p={3}
+                  color={"primary"}
+                  gap={0}
+                  as={motion.div}
+                  align={"center"}
+                  justifyContent={"center"}
+                  cursor={"pointer"}
+                  fontWeight={600}
+                  onClick={profileModal.onOpen}
+                  h="full"
+                  _hover={{
+                    bg: "",
+                  }}
+                  leftIcon={
+                    <Stack
+                      align="center"
+                      justifyContent="center"
+                      boxSize="35px"
+                      rounded="full"
+                      bg="primary"
+                      textAlign="center"
+                    >
+                      <Text
+                        textAlign="center"
+                        color="#FFF"
+                        textTransform="uppercase"
+                      >
+                        {LoggedinUser?.first_name?.charAt(0)}
+                      </Text>
+                    </Stack>
+                  }
+                  rightIcon={
+                    <Image
+                      src={dropdownIcon.src}
+                      alt=""
+                      filter={theme.theme_name !== "light" ? "invert(1)" : ""}
+                    />
+                  }
+                  border="1px solid"
+                  borderColor={
+                    theme.theme_name !== "light"
+                      ? "matador_border_color.200"
+                      : "matador_border_color.300"
+                  }
+                />
+              </Flex>
+            </>
+          )}
+          {showProgress && (
+            <Progress
+              w="full"
+              variant={`main_store`}
+              size="xs"
+              left={"0"}
+              top={`0px`}
+              position="fixed"
+              isIndeterminate
+              zIndex={"10"}
+              bg={`transparent`}
             />
-            <Wallet
-              onDrawerOpen={mobileModal.onOpen}
-              avatar={avatar}
-              isWalOpen={isWalOpen}
-              onWalClose={onWalClose}
-            />
-            <Feedback
-              onDrawerOpen={mobileModal.onOpen}
-              feedModal={feedBackModal}
-            />
-            <ReportBug
-              onDrawerOpen={mobileModal.onOpen}
-              reportBugModal={reportBugModal}
-            />
-            <SuggestIdea
-              onDrawerOpen={mobileModal.onOpen}
-              suggestModal={suggestModal}
-            />
-            <PortfolioAndAssetProfile
-              isOpen={isAssetOpen}
-              onClose={onAssetClose}
-              onNotOpen={onNotOpen}
-              onDrawerOpen={mobileModal.onOpen}
-            />
-            <ProfileMenu
-              TERMS={TERMS}
-              PRIVACY_POLICY={PRIVACY_POLICY}
-              avatar={avatar}
-              profileModal={profileModal}
-            />
-          </>
-        )}
-      </Flex>
+          )}
+        </Flex>
+      </Box>
       <Box
         display={{ base: "flex", lg: "none" }}
         {...navBarStyle?.mobile}
@@ -321,13 +355,13 @@ export const Navbar = ({ navBarStyle, activePage }) => {
           bg={"card_bg"}
           justify={"space-between"}
           align={"center"}
-          // h='48px'
           py="12px"
+          pos="relative"
         >
           <Flex align={"center"} gap="20px">
             {router.pathname === "/properties" ||
             router.pathname === "/settings" ? (
-              <Link href={LoggedinUser ? "/properties" : "/"}>
+              <Link href={mainLink}>
                 <Box
                   maxW="90px"
                   h="46px"
@@ -356,7 +390,6 @@ export const Navbar = ({ navBarStyle, activePage }) => {
               {activePage}
             </Text>
           </Flex>
-
           <HStack gap="24px">
             <Image
               src={notificationIcon.src}
@@ -372,24 +405,23 @@ export const Navbar = ({ navBarStyle, activePage }) => {
               fontSize={"30px"}
             />
           </HStack>
-        </Flex>
-        {isMobile && (
-          <>
-            <Notification
-              onDrawerOpen={mobileModal.onOpen}
-              isNotOpen={isNotOpen}
-              onNotClose={onNotClose}
-              onNotOpen={onNotOpen}
-              notifications={notifications}
+          {showProgress && (
+            <Progress
+              w="full"
+              variant={`main_store`}
+              size="xs"
+              left={"0"}
+              top={`0px`}
+              position="fixed"
+              isIndeterminate
+              zIndex={"10"}
+              bg={`transparent`}
             />
-          </>
-        )}
+          )}
+        </Flex>
         <MobileDrawer
           TERMS={TERMS}
           PRIVACY_POLICY={PRIVACY_POLICY}
-          feedBackModal={feedBackModal}
-          reportBugModal={reportBugModal}
-          suggestModal={suggestModal}
           onNotOpen={onNotOpen}
           onAssetOpen={onAssetOpen}
           onWatchOpen={onWatchOpen}
@@ -399,6 +431,30 @@ export const Navbar = ({ navBarStyle, activePage }) => {
           onDrawerClose={mobileModal.onClose}
         />
       </Box>
+      <Notification
+        onDrawerOpen={mobileModal.onOpen}
+        isNotOpen={isNotOpen}
+        onNotClose={onNotClose}
+        notifications={notifications}
+      />
+      <Wallet
+        onDrawerOpen={mobileModal.onOpen}
+        avatar={avatar}
+        isWalOpen={isWalOpen}
+        onWalClose={onWalClose}
+      />
+      <PortfolioAndAssetProfile
+        isOpen={isAssetOpen}
+        onClose={onAssetClose}
+        onNotOpen={onNotOpen}
+        onDrawerOpen={mobileModal.onOpen}
+      />
+      <ProfileMenu
+        TERMS={TERMS}
+        PRIVACY_POLICY={PRIVACY_POLICY}
+        avatar={avatar}
+        profileModal={profileModal}
+      />
     </>
   );
 };

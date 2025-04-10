@@ -25,18 +25,19 @@ import { fetchTermsAndConditionsPDF } from "@/api/agents";
 
 const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
   const toast = useToastForRequest();
+  const [signUp, setSignUp] = useState(false);
   const STOREINFO = useQuery(["storeInfo"], storeDetails);
   const store_data = STOREINFO.data?.data?.data;
   const storeName = store_name();
   const TERMS = store_data?.customer_document;
   const PRIVACY_POLICY = store_data?.customer_privacy_policy;
-  const STOREDOCUMENTS = useQuery(['terms'], fetchTermsAndConditionsPDF)
+  const STOREDOCUMENTS = useQuery(["terms"], fetchTermsAndConditionsPDF);
   const AGENTTERMS = STOREDOCUMENTS?.data?.data?.message?.document;
   const AGENT_PRIVACY_POLICY = STOREDOCUMENTS?.data?.data?.policy;
   const [checked, setChecked] = useState(false);
 
-  const privacyPolicy = rest?.isAgent ? AGENT_PRIVACY_POLICY : PRIVACY_POLICY
-  const termsAndConditions = rest?.isAgent ? AGENTTERMS : TERMS
+  const privacyPolicy = rest?.isAgent ? AGENT_PRIVACY_POLICY : PRIVACY_POLICY;
+  const termsAndConditions = rest?.isAgent ? AGENTTERMS : TERMS;
 
   const validateForm = (values) => {
     const errors = {};
@@ -178,14 +179,11 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
 
   return (
     <Box
-      maxW={{ lg: "475px" }}
+      maxW={{ lg: "533px" }}
       w={`100%`}
       bg={{ lg: "card_bg" }}
       p={{ lg: "24px" }}
       {...rest}
-      boxShadow={{
-        lg: "0px 4px 8px -2px rgba(16, 24, 40, 0.10), 0px 2px 4px -2px rgba(16, 24, 40, 0.06)",
-      }}
     >
       <Flex h="full" direction="column" align="start">
         <Text
@@ -197,7 +195,11 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
           textTransform={"uppercase"}
           letterSpacing={"0.24px"}
         >
-          {rest.isAgent ? `Realtor's Portal` : "Enter your email address"}
+          {rest.isAgent
+            ? `Realtor's Portal`
+            : signUp
+            ? "create a veritasi account"
+            : "log in to your veritasi account"}
         </Text>
         <Stack
           w={`100%`}
@@ -207,7 +209,6 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
           align={`start`}
         >
           <FormInput
-            // mt="24px"
             type="email"
             name="email"
             id="email"
@@ -246,7 +247,11 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
               textAlign="left"
               fontWeight="400"
               fontSize={{ base: 14, lg: 16 }}
-              color={theme.theme_name !== 'light' ? "matador_text.500" : "matador_text.300"}
+              color={
+                theme.theme_name !== "light"
+                  ? "matador_text.500"
+                  : "matador_text.300"
+              }
               letterSpacing={"-0.32px"}
               lineHeight={"19.2px"}
             >
@@ -268,8 +273,7 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
               </Link>{" "}
               &
               <Link
-                onClick={!termsAndConditions ? (e) => e.preventDefault() : null}
-                href={`${termsAndConditions ? termsAndConditions : ""}`}
+                href={termsAndConditions}
                 target={termsAndConditions ? "_blank" : ""}
                 color="primary"
                 _hover={{
@@ -281,69 +285,68 @@ const GetStarted = ({ onAuthClose, setPage, setEmail, ...rest }) => {
               </Link>
             </Text>
           </HStack>
-          <Button
-            type="submit"
-            color="white"
-            bg="primary"
-            w="full"
-            fontSize={{ base: "14px", lg: "16px" }}
-            onClick={formik.handleSubmit}
-            isLoading={isLoading}
-            p="26px"
-            isDisabled={!checked || !formik.isValid}
-            h="56px"
-            _hover={{
-              bg: lightenHex(15),
-            }}
-            rounded={0}
-            _active={{
-              opacity: 1,
-            }}
-          >
-            <Text
-              lineHeight={"28px"}
-              letterSpacing="0.18px"
-              textTransform="uppercase"
-              fontWeight={400}
+          <Stack w='full' gap='12px'>
+            <Button
+              type="submit"
+              color="white"
+              bg="primary"
+              w="full"
+              fontSize={{ base: "14px", lg: "16px" }}
+              onClick={formik.handleSubmit}
+              isLoading={isLoading}
+              p="26px"
+              isDisabled={!checked || !formik.isValid}
+              h="56px"
+              _hover={{
+                bg: lightenHex(15),
+              }}
+              rounded={0}
+              _active={{
+                opacity: 1,
+              }}
             >
-              Proceed
-            </Text>
-          </Button>
-          {store_data?.agent_active ? (
-            <Link display={"contents"} href={rest.isAgent ? "/" : "/agents"}>
-              <Button
-                type="submit"
-                w="full"
-                border={`1px solid`}
-                borderColor={
-                  theme.theme_name !== "light"
-                    ? "matador_border_color.200"
-                    : "matador_border_color.100"
-                }
-                p="21px"
-                h="56px"
-                bg={isDarkMode ? "matador_background.100" : "card_bg"}
-                rounded={0}
-                _hover={{
-                  bg: "",
-                  transform: "none",
-                  color: "primary",
-                }}
-                color={isDarkMode ? "text" : "#344054"}
-                fontSize={{ base: "14px", lg: "16px" }}
+              <Text
+                lineHeight={"28px"}
+                letterSpacing="0.18px"
+                textTransform="uppercase"
+                fontWeight={400}
               >
-                <Text
-                  letterSpacing="-0.32px"
-                  textTransform="uppercase"
-                  fontWeight={400}
-                >
-                  {rest.isAgent
-                    ? `sign in as a client`
-                    : `Go to realtor's portal`}
-                </Text>
-              </Button>
-            </Link>
-          ) : null}
+                Proceed
+              </Text>
+            </Button>
+            <Button
+              type="submit"
+              w="full"
+              border={`1px solid`}
+              borderColor={
+                theme.theme_name !== "light"
+                  ? "matador_border_color.200"
+                  : "matador_border_color.100"
+              }
+              p="21px"
+              h="56px"
+              bg={isDarkMode ? "matador_background.100" : "card_bg"}
+              rounded={0}
+              _hover={{
+                bg: "",
+                transform: "none",
+                color: "primary",
+              }}
+              color={isDarkMode ? "text" : "#344054"}
+              fontSize={{ base: "14px", lg: "16px" }}
+              onClick={() => setSignUp(!signUp)}
+            >
+              <Text
+                letterSpacing="-0.32px"
+                textTransform="uppercase"
+                fontWeight={400}
+              >
+                {signUp
+                  ? `ALREADY HAVE AN ACCOUNT? SIGN IN`
+                  : `New? create an account`}
+              </Text>
+            </Button>
+          </Stack>
         </Stack>
       </Flex>
     </Box>

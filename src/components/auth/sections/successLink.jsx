@@ -119,12 +119,11 @@ const SuccessLink = ({setPage, email, ...rest}) => {
   return (
     <Box
       bg={{ md: "card_bg"}}
-      maxW={{ md: "420px"}}
+      maxW={{ md: "533px"}}
       w={`100%`}
       px={{base: `0`, md: '28px'}}
       py={{base: `0`, md: '24px'}}
       borderRadius={'2px'}
-      boxShadow={{ md: "0px 4px 8px -2px rgba(16, 24, 40, 0.10), 0px 2px 4px -2px rgba(16, 24, 40, 0.06)"}}
       {...rest}
     >
       <Flex h="full" direction="column" align="start">

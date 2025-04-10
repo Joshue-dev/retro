@@ -1,0 +1,31 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="24" height="24" fill="#1E1E1E"/>
+<g clip-path="url(#clip0_4401_17934)">
+<rect width="1440" height="2855" transform="translate(-711 -27)" fill="white"/>
+<rect x="-711" y="-27" width="1440" height="3207" fill="#FBFCFC"/>
+<g filter="url(#filter0_d_4401_17934)">
+<rect x="-711" y="-27" width="1440" height="82" fill="#191919"/>
+</g>
+<rect x="-7.5" y="-7.5" width="186" height="39" rx="11.5" stroke="white"/>
+<rect width="24" height="24" fill="url(#pattern0)"/>
+</g>
+<defs>
+<filter id="filter0_d_4401_17934" x="-719" y="-31" width="1456" height="98" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="4"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_4401_17934"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_4401_17934" result="shape"/>
+</filter>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_4401_17934" transform="scale(0.0333333)"/>
+</pattern>
+<clipPath id="clip0_4401_17934">
+<rect width="1440" height="2855" fill="white" transform="translate(-711 -27)"/>
+</clipPath>
+<image id="image0_4401_17934" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAR0lEQVR4nO3TwQkAMAgEQfsvKxa2qUCQcBDQm7foYzHC7AGQ1PLX4RN7IW7S3oe4iRuX3Hg+mn+nnovu36nnFsKNx8ONbZILlJZvgA6sdGsAAAAASUVORK5CYII="/>
+</defs>
+</svg>

@@ -69,7 +69,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
           base: "repeat(1, 1fr)",
           md: "repeat(2, 1fr)",
           lg: "repeat(3, 1fr)",
-          xl: 'repeat(5, 1fr)'
+          xl: "repeat(5, 1fr)",
         }}
         gap="24px"
       >
@@ -124,7 +124,12 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
         </Stack>
         {storeData?.company_address ? (
           <Stack w="full" gap={{ base: "8px", md: "20px" }}>
-            <Text fontSize="18px" fontFamily="Liberation Sans" fontWeight={700} lineHeight='20px'>
+            <Text
+              fontSize="18px"
+              fontFamily="Liberation Sans"
+              fontWeight={700}
+              lineHeight="20px"
+            >
               Location
             </Text>
             <Text fontSize="14px" maxW="20em">
@@ -133,8 +138,17 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
           </Stack>
         ) : null}
         {storeData?.email ? (
-          <Stack display={{ base: "none", md: "flex" }} w="full" gap={{ base: "8px", md: "20px" }}>
-            <Text fontSize="18px" fontFamily="Liberation Sans" fontWeight={700}>
+          <Stack
+            display={{ base: "none", md: "flex" }}
+            w="full"
+            gap={{ base: "8px", md: "20px" }}
+          >
+            <Text
+              fontSize="18px"
+              fontFamily="Liberation Sans"
+              fontWeight={700}
+              lineHeight="20px"
+            >
               Contact
             </Text>
             <Text
@@ -147,45 +161,47 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
             </Text>
           </Stack>
         ) : null}
-        <Stack display={{ base: 'none', md: 'flex' }} gap="20px">
-        <Text fontSize="18px" fontWeight={700}>
-          Get the app
-        </Text>
-        <Flex gap="16px" align="center">
-          <Link
-            href="https://apps.apple.com/au/app/my-veritasi/id6478011265"
-            target="_blank"
-          >
-            <Image maxW="115px" src={AppleStoreIcon.src} alt="apple store" />
-          </Link>
-          <Link
-            href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi"
-            target="_blank"
-          >
-            <Image maxW="115px" src={PlayStoreIcon.src} alt="play store" />
-          </Link>
-        </Flex>
-      </Stack>
+        <Stack display={{ base: "none", md: "flex" }} gap="20px">
+          <Text fontSize="18px" fontWeight={700}>
+            Get the app
+          </Text>
+          <Flex gap="16px" align="center">
+            <Link
+              href="https://apps.apple.com/au/app/my-veritasi/id6478011265"
+              target="_blank"
+            >
+              <Image maxW="115px" src={AppleStoreIcon.src} alt="apple store" />
+            </Link>
+            <Link
+              href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi"
+              target="_blank"
+            >
+              <Image maxW="115px" src={PlayStoreIcon.src} alt="play store" />
+            </Link>
+          </Flex>
+        </Stack>
       </Grid>
-      {isMobile ? <Stack gap="16px">
-        <Text fontSize="20px" fontWeight={600}>
-          Get the app
-        </Text>
-        <Flex gap="16px" align="center">
-          <Link
-            href="https://apps.apple.com/au/app/my-veritasi/id6478011265"
-            target="_blank"
-          >
-            <Image maxW="115px" src={AppleStoreIcon.src} alt="apple store" />
-          </Link>
-          <Link
-            href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi"
-            target="_blank"
-          >
-            <Image maxW="115px" src={PlayStoreIcon.src} alt="play store" />
-          </Link>
-        </Flex>
-      </Stack>: null}
+      {isMobile ? (
+        <Stack gap="16px">
+          <Text fontSize="20px" fontWeight={600}>
+            Get the app
+          </Text>
+          <Flex gap="16px" align="center">
+            <Link
+              href="https://apps.apple.com/au/app/my-veritasi/id6478011265"
+              target="_blank"
+            >
+              <Image maxW="115px" src={AppleStoreIcon.src} alt="apple store" />
+            </Link>
+            <Link
+              href="https://play.google.com/store/apps/details?id=com.matadortrust.veritasi"
+              target="_blank"
+            >
+              <Image maxW="115px" src={PlayStoreIcon.src} alt="play store" />
+            </Link>
+          </Flex>
+        </Stack>
+      ) : null}
       <Stack
         direction={{ base: "column-reverse", md: "row" }}
         w="full"
@@ -203,9 +219,12 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
         >
           Created with myxellia.io
         </Text>
-        <HStack flexWrap={{ base: "wrap", md: 'nowrap' }} gap={{ base: "24px", md: "26px" }}>
+        <HStack
+          flexWrap={{ base: "wrap", md: "nowrap" }}
+          gap={{ base: "24px", md: "26px" }}
+        >
           <Link
-            href={`mailto:${storeData?.email}`}
+            href={"tel:+2349030150015"}
             bg={{ base: "#F4F4F5", md: "transparent" }}
             p={{ base: "12px", md: 0 }}
             border={{ base: "1px solid #E4E4E7", md: "none" }}
@@ -215,7 +234,7 @@ export const Footer = ({ TERMS, PRIVACY_POLICY }) => {
             <Image src={PhoneIcon.src} boxSize="24px" alt="phone icon" />
           </Link>
           <Link
-            href={"tel:+2349030150015"}
+            href={`mailto:${storeData?.email}`}
             bg={{ base: "#F4F4F5", md: "transparent" }}
             p={{ base: "12px", md: 0 }}
             border={{ base: "1px solid #E4E4E7", md: "none" }}

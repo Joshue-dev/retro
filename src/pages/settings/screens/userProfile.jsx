@@ -202,7 +202,7 @@ const UserProfile = ({ profileQuery }) => {
           fontWeight={"600"}
           textTransform={"uppercase"}
         >
-          tell us more about you
+          basic information
         </Text>
       </GridItem>
       <GridItem

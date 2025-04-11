@@ -217,7 +217,7 @@ const Portfolio = ({ LIST_OF_PORTFOLIO, handleScreen, setEquityId }) => {
                 fontSize: "20px",
                 letterSpacing: { base: "0.96px", md: "normal" },
                 textTransform: { base: "uppercase", md: "none" },
-                fontWeight: 400,
+                fontWeight: 600,
               }}
               height={{ base: "450px", md: "350px" }}
               text={`Your dashboard’s still quiet — it’s time to start building.`}

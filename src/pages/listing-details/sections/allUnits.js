@@ -12,6 +12,7 @@ import { fetchAllUnits } from "../../../api/listing";
 import { Spinner } from "../../../ui-lib";
 import ErrorState from "../../../components/appState/error-state";
 import { UnitCard } from "@/components/cards/UnitCard";
+import { colors } from "constants/names";
 
 const AllUnits = ({ info }) => {
   const projectId = info?.id;
@@ -62,10 +63,10 @@ const CardLoadingState = () => {
       {Array.from({ length: 4 }).map((idx) => {
         return (
           <Skeleton
-            w="full"
-            maxW={{ base: "95vw", md: "392.815px" }}
-            minH={{ base: "92px", md: "510.664px" }}
+            h="679.048px"
             key={idx}
+            startColor={colors?.[Math.random() * 3]}
+            endColor={colors?.[Math.random() * 3]}
           />
         );
       })}

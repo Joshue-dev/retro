@@ -32,6 +32,7 @@ const EmptyState = ({ text, height, heading, noHeader, icon, ...rest }) => {
         <Text
           fontWeight={rest.fontWeight || "400"} color="text"
           fontSize={rest.textSize || { base: '12px', md: "16px" }} textAlign="center"
+          {...rest.textStyle}
         >
           {text || 'No data yet'}
         </Text>

@@ -4,20 +4,18 @@ import {
   HStack,
   Text,
   Stack,
-  SlideFade,
   ModalCloseButton,
   ModalBody,
   useTheme,
 } from "@chakra-ui/react";
 import angledIcon from "/src/images/icons/angledArrow.svg";
 import React, { useEffect, useState } from "react";
-import { fetchUserEquity } from "../../../api/listing";
-import { useInfiniteQuery } from "react-query";
 import { Spinner } from "../../../ui-lib";
 import EmptyState from "../../appState/empty-state";
 import { css, keyframes } from "@emotion/react";
 import { useLightenHex } from "utils/lightenColorShade";
 import ErrorState from "@/components/appState/error-state";
+import EmptyStateImage from "images/portfolio-empty-state.png";
 
 const Portfolio = ({ LIST_OF_PORTFOLIO, handleScreen, setEquityId }) => {
   const [shouldScroll, setScrollDirection] = useState("down");
@@ -205,16 +203,29 @@ const Portfolio = ({ LIST_OF_PORTFOLIO, handleScreen, setEquityId }) => {
             </>
           ) : (
             <EmptyState
-              icon
+              icon={
+                <Image
+                  src={EmptyStateImage.src}
+                  alt="empty state icon"
+                  w="251.678px"
+                  h="167.785px"
+                  objectFit="contain"
+                />
+              }
               textSize={14}
               headerStyle={{
-                fontSize: "16px",
+                fontSize: "20px",
                 letterSpacing: { base: "0.96px", md: "normal" },
                 textTransform: { base: "uppercase", md: "none" },
+                fontWeight: 400,
               }}
-              height={{ base: "200px", md: "300px" }}
-              text={`You haven't purchased any property yet.`}
+              height={{ base: "450px", md: "350px" }}
+              text={`Your dashboard’s still quiet — it’s time to start building.`}
               gap={0}
+              fontWeight={400}
+              textStyle={{
+                width: '250px'
+              }}
             />
           )}
           {/* <SlideFade in={isFetchingNextPage}>

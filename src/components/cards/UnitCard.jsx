@@ -66,7 +66,7 @@ export const UnitCard = ({ data }) => {
         >
           <Stack
             w="full"
-            minH="679.048px"
+            h="679.048px"
             pos="relative"
             align="center"
             justify="end"

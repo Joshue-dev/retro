@@ -62,9 +62,6 @@ const Properties = () => {
 
   const wrap = document?.getElementById("projectWrap");
 
-  const arrayForLoaders = (lens) =>
-    Array.from({ length: lens || 4 - (numberOfListings % 4) }, () => 0);
-
   const handleAnimation = () => {
     const currentScrollY = wrap?.scrollTop;
     if (currentScrollY > 540 && numberOfListings > 10) {
@@ -133,26 +130,6 @@ const Properties = () => {
                     />
                   </Stack>
                 ))}
-                {isFetchingNextPage
-                    ? arrayForLoaders().map((item, index) => (
-                        <SlideFade key={index} in={isFetchingNextPage}>
-                            <Skeleton
-                              shadow={"sm"}
-                              cursor={"pointer"}
-                              whileTap={{ scale: 0.98 }}
-                              whileHover={{ scale: 1.01 }}
-                              h="326px"
-                              w="full"
-                              bgSize={"cover"}
-                              borderRadius={"5px"}
-                              position={"relative"}
-                              startColor={colors?.[Math.floor(Math.random() * 3)]}
-                              endColor={colors?.[Math.floor(Math.random() * 3)]}
-                              rounded="0"
-                            />
-                        </SlideFade>
-                      ))
-                    : null}
               </Grid>
             ) : (
               <EmptyState

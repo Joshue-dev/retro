@@ -52,13 +52,6 @@ const MobileHeader = ({
       {noIcons ? 
         <CloseIcon color='text' fontSize={14} onClick={onDrawerClose} />
       : <HStack gap="24px">
-        <Image
-          src={notificationIcon.src}
-          alt=""
-          boxSize="25px"
-          filter={theme.theme_name !== "light" ? "invert(1)" : ""}
-          onClick={onNotOpen}
-        />
         <Icon
           as={BiMenu}
           color="text"
